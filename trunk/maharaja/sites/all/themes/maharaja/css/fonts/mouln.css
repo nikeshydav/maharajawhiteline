@@ -1,0 +1,8 @@
+@font-face {
+    font-family: 'MoulinettepcNormal';
+    src: url('mouln___1.eot');
+    src: url('mouln___1.eot') format('embedded-opentype'),
+         url('mouln___1.woff') format('woff'),
+         url('mouln___1.ttf') format('truetype'),
+         url('mouln___1.svg#MoulinettepcNormal') format('svg');
+}

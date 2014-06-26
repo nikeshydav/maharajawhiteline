@@ -1,0 +1,31 @@
+name = Maharaja Whiteline
+description = A theme for Maharaja Whiteline
+package = Core
+version = 1.0
+core = 7.x
+
+;stylesheets[all][] = css/normalize.css
+;stylesheets[print][] = css/print.css
+
+
+regions[header] = Header
+regions[help] = Help
+regions[menu] = Main Menu
+regions[submenu] = Sub Menu
+regions[breadcrumb] = Bread Crumb
+
+
+regions[slider] = Slider HomePage
+regions[banner] = Banner HomePage
+
+regions[featured] = Featured
+regions[content] = Content
+regions[commenting] = Product Comments
+regions[sidebar_first] = Sidebar first
+regions[sidebar_second] = Sidebar second
+
+regions[footer_first] = Footer Above Line
+regions[footer_second] = Footer Below Line
+regions[footer] = Footer
+
+settings[shortcut_module_link] = 0

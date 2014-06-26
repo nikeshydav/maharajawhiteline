@@ -1,0 +1,8 @@
+@font-face {
+    font-family: 'BauhausStdMedium';
+    src: url('font_0.eot');
+    src: url('font_0.eot') format('embedded-opentype'),
+         url('font_0.woff') format('woff'),
+         url('font_0.ttf') format('truetype'),
+         url('font_0.svg#BauhausStdMedium') format('svg');
+}
