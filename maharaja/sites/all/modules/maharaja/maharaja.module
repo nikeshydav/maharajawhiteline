@@ -1,0 +1,222 @@
+<?php
+
+function maharaja_permission() {
+    return array(
+        'administer maharaja' => array(
+            'title' => t('Administer maharaja'),
+            'description' => t('Allows a user to admin.'),
+        ),
+        'access content' => array(
+            'title' => t('Notify of Path Changes'),
+            'description' => t('visitor can access.'),
+        ),
+    );
+}
+
+function maharaja_menu() {
+    $items['admin/list_all_media'] = array(
+        'title' => 'Media',
+        'page callback' => 'media',
+        'access arguments' => array('administer maharaja'),
+        'type' => MENU_NORMAL_ITEM,
+        'weight' => 10,
+        'file' => 'maharaja.common.inc',
+    );
+    
+    $items['buyonline'] = array(
+        'title' => 'Buy Online',
+        'page callback' => 'buyonline',
+        'access arguments' => array('access content'),
+        'type' => MENU_CALLBACK,
+        'weight' => 10,
+        'file' => 'maharaja.common.inc',
+    );
+    $items['sitemap'] = array(
+        'title' => 'Sitemap',
+        'page callback' => 'buyonline',
+        'access arguments' => array('access content'),
+        'type' => MENU_CALLBACK,
+        'weight' => 10,
+        'file' => 'maharaja.common.inc',
+    );
+    $items['promotions'] = array(
+        'title' => 'Product Promotions',
+        'page callback' => 'buyonline',
+        'access arguments' => array('access content'),
+        'type' => MENU_CALLBACK,
+        'weight' => 10,
+        'file' => 'maharaja.common.inc',
+    );
+
+    $items['aboutus'] = array(
+        'title' => 'About Us',
+        'page callback' => 'aboutus',
+        'access arguments' => array('access content'),
+        'type' => MENU_CALLBACK,
+        'weight' => 10,
+        'file' => 'maharaja.common.inc',
+    );
+    
+    $items['aboutus-history'] = array(
+        'title' => 'About Us',
+        'page callback' => 'aboutus',
+        'access arguments' => array('access content'),
+        'type' => MENU_CALLBACK,
+        'weight' => 10,
+        'file' => 'maharaja.common.inc',
+    );
+
+    $items['iamapartner'] = array(
+        'title' => 'I am a partner',
+        'page callback' => 'contactus',
+        'access arguments' => array('access content'),
+        'type' => MENU_CALLBACK,
+        'weight' => 10,
+        'file' => 'maharaja.common.inc',
+    );
+
+$items['iamaconsumer'] = array(
+        'title' => 'I am a consumer',
+        'page callback' => 'contactus',
+        'access arguments' => array('access content'),
+        'type' => MENU_CALLBACK,
+        'weight' => 10,
+        'file' => 'maharaja.common.inc',
+    );
+$items['distributor-enquiry'] = array(
+        'title' => 'New Distributor Enquiry',
+        'page callback' => 'contactus',
+        'access arguments' => array('access content'),
+        'type' => MENU_CALLBACK,
+        'weight' => 10,
+        'file' => 'maharaja.common.inc',
+    );
+
+$items['institutionalqueries'] = array(
+        'title' => 'Institutional queries',
+        'page callback' => 'contactus',
+        'access arguments' => array('access content'),
+        'type' => MENU_CALLBACK,
+        'weight' => 10,
+        'file' => 'maharaja.common.inc',
+    );
+
+
+    $items['contactus'] = array(
+        'title' => 'Contact Us',
+        'page callback' => 'contactus',
+        'access arguments' => array('access content'),
+        'type' => MENU_CALLBACK,
+        'weight' => 10,
+        'file' => 'maharaja.common.inc',
+    );
+    
+    $items['joinus'] = array(
+        'title' => 'Career at Maharaja',
+        'page callback' => 'contactus',
+        'access arguments' => array('access content'),
+        'type' => MENU_CALLBACK,
+        'weight' => 10,
+        'file' => 'maharaja.common.inc',
+    );
+
+    $items['storelocator'] = array(
+        'title' => 'Store Locator',
+        'page callback' => 'storelocator',
+        'access arguments' => array('access content'),
+        'type' => MENU_CALLBACK,
+        'weight' => 10,
+        'file' => 'maharaja.common.inc',
+    );
+
+    $items['recipe-all'] = array(
+        'title' => 'Recipe',
+        'page callback' => 'storelocator',
+        'access arguments' => array('access content'),
+        'type' => MENU_CALLBACK,
+        'weight' => 10,
+        'file' => 'maharaja.common.inc',
+    );
+
+    return $items;
+}
+
+/*
+ * Remove Taxonomy Description from admin panel
+
+
+  function maharaja_form_taxonomy_form_term_alter(&$form, &$form_state) {
+  $form['description']['#access'] = FALSE;
+  } */
+
+function productuseddata() {
+    empty($products);
+    $sql = "SELECT n.nid,n.title FROM {node} n where n.type='product'";
+    $result = db_query($sql);
+    foreach ($result as $item) {
+        $products[$item->nid] = $item->title;
+    }
+    return $products;
+}
+
+function select_default_product($nid) {
+    empty($products);
+    if (isset($nid)) {
+        $sql = "SELECT n.pid FROM {productused} n where n.rid=$nid ";
+        $result = db_query($sql);
+        foreach ($result as $item) {
+            $products[$item->pid] = $item->pid;
+        }
+    } else {
+        $products[] = 0;
+    }
+    return $products;
+}
+
+function maharaja_form_node_form_alter(&$form, &$form_state, $form_id) {
+    $nid = isset($form['nid']['#value']) ? $form['nid']['#value'] : '0';
+    if ($form['#attributes']['class'][1] == 'node-recipe-form') {
+        $form['product_used'] = array(
+            '#type' => 'fieldset',
+            '#access' => TRUE,
+            '#title' => 'Products Used',
+            '#collapsible' => FALSE,
+            '#collapsed' => FALSE,
+            '#weight' => 12,
+            'product_used_active' => array(
+                '#type' => 'select',
+                '#title' => 'Choose Products used for making this recipe (Please do not choose more than 3)',
+                '#options' => productuseddata(),
+                '#multiple' => TRUE,
+                '#required' => TRUE,
+                '#size' => 3,
+                '#default_value' => select_default_product($nid),
+            ),
+        );
+
+        $form['actions']['submit']['#submit'][] = 'maharaja_recipe_submit';
+    }
+}
+
+function maharaja_recipe_submit($form, $form_state) {
+    
+    $nid = $form['nid']['#value'];
+    if($nid==''){
+        $sql = "SELECT nid FROM {node} n order by nid desc limit 0,1";
+    $result = db_query($sql);
+    foreach ($result as $item) {
+       $nid = $item->nid;
+    }
+    }
+    $prodcut_used = $form['product_used']['product_used_active']['#value'];
+    
+    db_delete('productused')->condition('rid', $nid)->execute();
+    foreach ($prodcut_used as $key => $value) {
+        db_insert('productused')
+                ->fields(array(
+                    'pid' => $value,
+                    'rid' => $nid,
+                ))
+                ->execute();
+    }
+}
